@@ -1,0 +1,29 @@
+# Machine Learning Frameworks
+tensorflow==2.15.0
+torch==2.1.2
+torchvision==0.16.2
+
+# Model inference
+onnxruntime==1.16.3
+
+# Image processing
+opencv-python==4.9.0.80
+pillow==10.2.0
+scikit-image==0.22.0
+
+# Data processing
+numpy==1.26.3
+pandas==2.2.0
+scikit-learn==1.4.0
+
+# Model utilities
+transformers==4.37.2
+timm==0.9.12
+
+# Visualization (for training)
+matplotlib==3.8.2
+seaborn==0.13.1
+
+# Development
+jupyter==1.0.0
+notebook==7.0.6

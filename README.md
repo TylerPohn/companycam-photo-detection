@@ -1,84 +1,273 @@
-# BMAX - Orchestrating BMAD
+# CompanyCam Photo Detection System
 
-Automating [BMAD!](https://github.com/bmad-code-org/BMAD-METHOD) BMAD is great. But what if we... automated it?
+A scalable photo detection and classification system for construction photo management, built with FastAPI, React, and deployed on AWS EKS.
 
-Enter BMAX: automate the orchestration of your BMAD project's implementation phase. 
+## Overview
 
-## QuickStart Checklist
+This system provides automated detection, classification, and metadata extraction for construction photos, enabling efficient photo management and analysis for CompanyCam users.
 
-- [ ] Clone this repo: `git clone https://github.com/mefrem/BMAX.git <project_name>
-  - Remove this repo from your git: `git remote remove origin`
-- [ ] Start Claude, create `/docs/prd.md` and `/docs/architecture.md` by invoking the `@analyst`, `@pm`, or `@architect` to elicit those docs. 
-  - See [quickstart visual](https://github.com/bmad-code-org/BMAD-METHOD/blob/main/src/modules/bmm/docs/quick-start.md#the-complete-flow-visualized)
-- [ ] To orchestrate, start Claude with `--dangerously-skip-permissions` and paste the `orchestrator.md` contents to your main Claude Code chat.
-  - That chat will invoke subagents as needed, and will continue for **1 entire Epic** by default. You can edit the prompt if you want to implement for X stories, till 100% completion, etc.
+### Key Features
 
-Disregard "cowboy-mode.md" UNLESS you want to parallelize (in which case, see [cowboy-mode](##cowboy-mode)) (warning, experimental)
+- **Photo Upload Service**: Secure photo uploads with S3 storage
+- **Detection Service**: ML-powered photo classification and object detection
+- **Metadata Service**: Automatic metadata extraction and management
+- **RESTful API**: FastAPI-based backend with comprehensive endpoints
+- **Modern Frontend**: React-based UI with TypeScript
+- **Scalable Infrastructure**: AWS EKS deployment with auto-scaling
 
-## What This Does
+## Architecture
 
-Automates the **Scrum Master -> Dev -> QA** portion of the Implementation phase (i.e. the coding and review) until your entire epic of software is developed and reviewed. Claude continuously:
-
-1. Drafts stories (SM agent)
-2. Implements code (Dev agent)
-3. Reviews implementation (QA agent)
-4. Has dev fix issues if QA sources any and repeats until "Done"
-5. Moves to next story automatically
-6. Keeps a log in `orchestration-flow.md` of work, agent invocations, etc.
-
-**You only get interrupted when the entire epic is finished or there's a critical blocker.**
-
-## The Three Agents
-
-**@sm-scrum** - Creates detailed stories from epics. Loads PRD/Architecture context. MUST mark "Ready for Development".
-
-**@dev** - Implements stories, writes tests, validates everything passes. MUST mark "Ready for Review".
-
-**@qa-quality** - Reviews against acceptance criteria, creates quality gate (PASS/CONCERNS/FAIL/WAIVED). MUST mark "Done" or "In Progress".
-
-**note: scrum master and QA agents run "haiku" model for speed and context efficiency**
-
-
-## What's Included
-
-This repository contains:
-
-- **BMAD v4** - Complete framework in `.bmad-core/`
-- **Pre-configured agents** - SM, Dev, and QA agents ready to use in `.claude/agents/`
-- **Orchestrator prompts** - Orchestrator.md for sequential orchestration of your implementation, and cowboy-mode for parallelized workflow
+The system follows a microservices architecture:
 
 ```
-orchestrator.md                   # Sequential: one epic, one story at a time
-cowboy-mode.md                    # Parallel: multiple epics/stories simultaneously
-.claude/agents/                   # SM, Dev, QA agent configs (pre-loaded)
-.bmad-core/                       # Full BMAD v4 framework
+├── backend/          # FastAPI backend services
+├── frontend/         # React frontend application
+├── ml-models/        # Machine learning models
+├── infrastructure/   # Terraform & Kubernetes configs
+└── docs/            # Technical documentation
 ```
 
-## cowboy-mode
+For detailed architecture information, see [docs/architecture.md](docs/architecture.md).
 
-1. Prompt Claude to make a `workstreams.md` file, which will analyze your PRD and architecture docs to establish what workstreams (sequences of stories) depend upon, i.e. stories 2.1-2.10 depend upon story 1.1 to be Done, etc.
+## Prerequisites
 
-### workstreams.md prompt
+- **Docker** 20.10+ and Docker Compose 2.0+
+- **Python** 3.11+ (for backend development)
+- **Node.js** 20+ and npm (for frontend development)
+- **Git** for version control
+- **AWS CLI** (for deployment)
+- **kubectl** (for Kubernetes management)
+
+## Quick Start
+
+### 1. Clone the Repository
+
+```bash
+git clone <repository-url>
+cd companycam-photo-detection
+```
+
+### 2. Set Up Environment Variables
+
+```bash
+cp .env.example .env
+# Edit .env with your configuration
+```
+
+### 3. Start Development Environment
+
+Using Docker Compose (recommended):
+
+```bash
+docker-compose up -d
+```
+
+This starts:
+- PostgreSQL (port 5432)
+- Redis (port 6379)
+- MinIO (ports 9000, 9001)
+- Backend API (port 8000)
+- Frontend Dev Server (port 5173)
+
+### 4. Verify Services
+
+- **Backend API**: http://localhost:8000
+- **API Docs**: http://localhost:8000/docs
+- **Frontend**: http://localhost:5173
+- **MinIO Console**: http://localhost:9001
+
+## Development
+
+### Backend Development
+
+```bash
+cd backend
+
+# Create virtual environment
+python -m venv venv
+source venv/bin/activate  # On Windows: venv\Scripts\activate
+
+# Install dependencies
+pip install -r requirements.txt
+pip install -r requirements-dev.txt
+
+# Run tests
+pytest
+
+# Run with hot reload
+uvicorn src.main:app --reload --host 0.0.0.0 --port 8000
+```
+
+### Frontend Development
+
+```bash
+cd frontend
+
+# Install dependencies
+npm install
+
+# Run development server
+npm run dev
+
+# Run tests
+npm test
+
+# Build for production
+npm run build
+```
+
+### Code Quality
+
+We use pre-commit hooks for code quality:
+
+```bash
+# Install pre-commit
+pip install pre-commit
+
+# Install hooks
+pre-commit install
+
+# Run manually
+pre-commit run --all-files
+```
+
+## Testing
+
+### Backend Tests
+
+```bash
+cd backend
+pytest                           # Run all tests
+pytest --cov=src                 # With coverage
+pytest -v tests/test_main.py     # Specific test file
+pytest -k test_health_check      # Specific test
+```
+
+### Frontend Tests
+
+```bash
+cd frontend
+npm test                         # Run all tests
+npm run test:coverage            # With coverage
+```
+
+### Integration Tests
+
+```bash
+docker-compose up -d
+# Wait for services to be healthy
+pytest tests/integration/
+```
+
+## Deployment
+
+### Staging Deployment
+
+```bash
+# Deploy to staging (requires AWS credentials)
+git push origin staging
+
+# Manual deployment
+kubectl apply -f infrastructure/k8s/staging/
+```
+
+### Production Deployment
+
+```bash
+# Deploy to production (blue/green)
+git push origin main
+
+# Manual deployment with approval
+kubectl apply -f infrastructure/k8s/production/
+```
+
+See [docs/deployment.md](docs/deployment.md) for detailed deployment instructions.
+
+## CI/CD Pipeline
+
+GitHub Actions automatically:
+
+1. **Lint**: Checks code style (Black, Flake8, ESLint)
+2. **Test**: Runs unit tests with coverage
+3. **Build**: Creates Docker images
+4. **Deploy**: Deploys to staging/production (with approval)
+
+See [.github/workflows/ci.yml](.github/workflows/ci.yml) for pipeline configuration.
+
+## Project Structure
 
 ```
-Review `docs/prd.md` and `architecture.md` to identify parallelizable workstreams. Analyze Epic/Story dependencies to determine:
-- Which stories block others (e.g., Story 1.1 dev environment setup must precede Stories 2.1-2.5 frontend work)
-- Which workstreams can proceed independently once unblocked
-- Optimal execution order for maximum parallelization
-
-Create `docs/workstreams.md` that clearly maps dependencies and parallel execution paths, enabling foolproof concurrent development.
+companycam-photo-detection/
+├── .github/
+│   └── workflows/           # CI/CD pipelines
+├── backend/
+│   ├── src/                # Application source code
+│   ├── tests/              # Test files
+│   ├── config/             # Configuration files
+│   ├── Dockerfile
+│   ├── requirements.txt
+│   └── pyproject.toml
+├── frontend/
+│   ├── src/                # React components
+│   ├── tests/              # Component tests
+│   ├── public/             # Static assets
+│   └── package.json
+├── ml-models/
+│   ├── models/             # Trained models
+│   └── training/           # Training scripts
+├── infrastructure/
+│   ├── terraform/          # AWS infrastructure
+│   └── k8s/               # Kubernetes manifests
+├── docs/                   # Documentation
+├── docker-compose.yml
+├── .env.example
+├── .gitignore
+└── README.md
 ```
 
-## Benefits
+## Environment Variables
 
-- **Zero human bottleneck** - Cycles 24/7 until done
-- **Quality enforced** - Status gates prevent shortcuts
-- **Full audit trail** - Everything logged to `orchestration-flow.md`
-- **Scalable** - Sequential for focus, parallel for speed
-- **Context efficient** - Agents load only what they need
+Key environment variables (see `.env.example` for complete list):
 
-## What's in .bmad-core
+| Variable | Description | Default |
+|----------|-------------|---------|
+| `DATABASE_URL` | PostgreSQL connection string | `postgresql://...` |
+| `REDIS_URL` | Redis connection string | `redis://localhost:6379` |
+| `AWS_ACCESS_KEY_ID` | AWS credentials | - |
+| `AWS_SECRET_ACCESS_KEY` | AWS credentials | - |
+| `S3_BUCKET` | S3 bucket for photos | `companycam-photos` |
+| `ENVIRONMENT` | Environment name | `development` |
 
-Complete BMAD framework with 10 agents, 20+ tasks, checklists, knowledge base, and templates. Agents reference these as needed.
+## Contributing
 
-**TL;DR**: Paste an orchestrator prompt into Claude Code. It runs SM -> Dev -> QA cycles continuously until your entire epic is done. You get pinged when it's finished.
+See [CONTRIBUTING.md](CONTRIBUTING.md) for development workflow and guidelines.
+
+## Documentation
+
+- [Architecture Documentation](docs/architecture.md)
+- [Product Requirements](docs/prd.md)
+- [API Documentation](http://localhost:8000/docs) (when running)
+
+## License
+
+MIT License - see [LICENSE](LICENSE) file for details.
+
+## Support
+
+For issues or questions:
+- Create an issue in the repository
+- Check existing documentation in `docs/`
+- Review API documentation at `/docs` endpoint
+
+## Monitoring & Observability
+
+- **Metrics**: Prometheus metrics at `/metrics` endpoint
+- **Health Check**: `/health` endpoint
+- **Logs**: Structured JSON logging with correlation IDs
+
+## Security
+
+- All sensitive data encrypted at rest and in transit
+- AWS IAM roles for service authentication
+- Regular security scans in CI/CD pipeline
+- See [SECURITY.md](SECURITY.md) for reporting vulnerabilities
