@@ -1,0 +1,14 @@
+.env
+*.env.*
+*.zip
+*.png
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+venv/
+.env/
+node_modules/
+dist/
+cdk.out/
+*.log
