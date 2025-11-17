@@ -1,6 +1,7 @@
 """Pytest configuration and shared fixtures"""
 
 import pytest
+import pytest_asyncio
 import asyncio
 from typing import AsyncGenerator
 from fastapi.testclient import TestClient
@@ -39,7 +40,7 @@ def event_loop():
     loop.close()
 
 
-@pytest.fixture(scope="function")
+@pytest_asyncio.fixture(scope="function")
 async def test_engine():
     """Create a test database engine"""
     engine = create_async_engine(
@@ -59,7 +60,7 @@ async def test_engine():
     await engine.dispose()
 
 
-@pytest.fixture(scope="function")
+@pytest_asyncio.fixture(scope="function")
 async def db_session(test_engine) -> AsyncGenerator[AsyncSession, None]:
     """Create a database session for testing"""
     async_session_maker = async_sessionmaker(
@@ -73,7 +74,7 @@ async def db_session(test_engine) -> AsyncGenerator[AsyncSession, None]:
         await session.rollback()
 
 
-@pytest.fixture
+@pytest_asyncio.fixture
 async def sample_organization(db_session: AsyncSession) -> Organization:
     """Create a sample organization for testing"""
     org = Organization(name="Test Organization")
@@ -83,7 +84,7 @@ async def sample_organization(db_session: AsyncSession) -> Organization:
     return org
 
 
-@pytest.fixture
+@pytest_asyncio.fixture
 async def sample_user(db_session: AsyncSession, sample_organization: Organization) -> User:
     """Create a sample user for testing"""
     user = User(
@@ -99,7 +100,7 @@ async def sample_user(db_session: AsyncSession, sample_organization: Organizatio
     return user
 
 
-@pytest.fixture
+@pytest_asyncio.fixture
 async def sample_project(db_session: AsyncSession, sample_organization: Organization) -> Project:
     """Create a sample project for testing"""
     project = Project(
@@ -114,7 +115,7 @@ async def sample_project(db_session: AsyncSession, sample_organization: Organiza
     return project
 
 
-@pytest.fixture
+@pytest_asyncio.fixture
 async def sample_photo(
     db_session: AsyncSession,
     sample_user: User,
