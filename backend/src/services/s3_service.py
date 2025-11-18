@@ -247,3 +247,76 @@ class S3Service:
         except ClientError as e:
             logger.error(f"Error deleting object: {e}")
             raise S3ConnectionError(f"Failed to delete object: {e}")
+
+    async def download_file_bytes(self, bucket: Optional[str], s3_key: str) -> bytes:
+        """
+        Download file bytes from S3.
+
+        Args:
+            bucket: S3 bucket name (uses default if None)
+            s3_key: S3 key of the object
+
+        Returns:
+            File bytes
+
+        Raises:
+            S3ConnectionError: If download fails
+        """
+        bucket_name = bucket or settings.s3_bucket
+
+        try:
+            response = self.s3_client.get_object(Bucket=bucket_name, Key=s3_key)
+            file_bytes = response["Body"].read()
+            logger.debug(f"Downloaded {len(file_bytes)} bytes from {bucket_name}/{s3_key}")
+            return file_bytes
+        except ClientError as e:
+            error_code = e.response.get("Error", {}).get("Code", "Unknown")
+            logger.error(f"Error downloading file: {error_code} - {e}")
+            raise S3ConnectionError(f"Failed to download file: {error_code}")
+        except Exception as e:
+            logger.error(f"Unexpected error downloading file: {e}")
+            raise S3ConnectionError(f"Failed to download file: {str(e)}")
+
+    def upload_bytes(
+        self, file_bytes: bytes, s3_key: str, content_type: str = "application/octet-stream"
+    ) -> str:
+        """
+        Upload bytes to S3.
+
+        Args:
+            file_bytes: Bytes to upload
+            s3_key: S3 key for the object
+            content_type: Content type of the file
+
+        Returns:
+            S3 URL of uploaded object
+
+        Raises:
+            S3ConnectionError: If upload fails
+        """
+        try:
+            self.s3_client.put_object(
+                Bucket=settings.s3_bucket,
+                Key=s3_key,
+                Body=file_bytes,
+                ContentType=content_type,
+            )
+
+            # Generate the S3 URL
+            if settings.aws_endpoint_url:
+                # For local development with MinIO
+                s3_url = f"{settings.aws_endpoint_url}/{settings.s3_bucket}/{s3_key}"
+            else:
+                # For AWS S3
+                s3_url = f"https://{settings.s3_bucket}.s3.{settings.aws_region}.amazonaws.com/{s3_key}"
+
+            logger.info(f"Uploaded {len(file_bytes)} bytes to {s3_url}")
+            return s3_url
+
+        except ClientError as e:
+            error_code = e.response.get("Error", {}).get("Code", "Unknown")
+            logger.error(f"Error uploading bytes: {error_code} - {e}")
+            raise S3ConnectionError(f"Failed to upload bytes: {error_code}")
+        except Exception as e:
+            logger.error(f"Unexpected error uploading bytes: {e}")
+            raise S3ConnectionError(f"Failed to upload bytes: {str(e)}")

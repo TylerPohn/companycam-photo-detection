@@ -8,6 +8,7 @@ from src.api.photos import router as photos_router
 from src.api.auth import router as auth_router
 from src.api.projects import router as projects_router
 from src.api.health import router as health_router
+from src.api.orchestrator import router as orchestrator_router
 from src.config import settings
 
 # Configure logging
@@ -37,6 +38,7 @@ app.include_router(health_router)
 app.include_router(auth_router)
 app.include_router(projects_router)
 app.include_router(photos_router)
+app.include_router(orchestrator_router)
 
 
 @app.get("/")

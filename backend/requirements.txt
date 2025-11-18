@@ -27,6 +27,7 @@ pydantic-settings==2.1.0
 httpx==0.26.0
 python-dateutil==2.8.2
 pillow==10.2.0
+numpy==1.26.3
 
 # Async support
 aiofiles==23.2.1
@@ -37,3 +38,6 @@ email-validator==2.1.0.post1
 
 # Monitoring & Logging
 prometheus-client==0.19.0
+
+# Retry and Resilience
+tenacity==8.2.3
