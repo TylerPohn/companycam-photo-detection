@@ -1,0 +1,110 @@
+{
+  "reference_objects": {
+    "person": {
+      "name": "Person (Average Adult)",
+      "height_cm": 170.0,
+      "height_range_cm": [150.0, 190.0],
+      "confidence_factor": 0.85,
+      "detection_class": "person",
+      "notes": "Average adult height, varies by region and gender"
+    },
+    "measuring_tape": {
+      "name": "Measuring Tape",
+      "height_cm": null,
+      "width_cm": 2.5,
+      "confidence_factor": 0.95,
+      "detection_class": "measuring_tape",
+      "notes": "Most accurate scale reference - direct measurement from tape markings"
+    },
+    "ruler": {
+      "name": "Standard Ruler",
+      "length_cm": 30.0,
+      "width_cm": 3.0,
+      "confidence_factor": 0.92,
+      "detection_class": "ruler",
+      "notes": "30cm standard ruler"
+    },
+    "car": {
+      "name": "Passenger Car",
+      "height_cm": 150.0,
+      "length_cm": 450.0,
+      "width_cm": 180.0,
+      "confidence_factor": 0.70,
+      "detection_class": "car",
+      "notes": "Average passenger car dimensions, high variance"
+    },
+    "wheel": {
+      "name": "Standard Car Wheel",
+      "diameter_cm": 65.0,
+      "diameter_range_cm": [55.0, 75.0],
+      "confidence_factor": 0.75,
+      "detection_class": "wheel",
+      "notes": "Standard 16-inch wheel diameter"
+    },
+    "shovel": {
+      "name": "Standard Shovel",
+      "length_cm": 120.0,
+      "width_cm": 25.0,
+      "confidence_factor": 0.80,
+      "detection_class": "shovel",
+      "notes": "Standard shovel length"
+    },
+    "wheelbarrow": {
+      "name": "Wheelbarrow",
+      "height_cm": 65.0,
+      "length_cm": 150.0,
+      "width_cm": 60.0,
+      "volume_liters": 90.0,
+      "confidence_factor": 0.82,
+      "detection_class": "wheelbarrow",
+      "notes": "Standard construction wheelbarrow"
+    }
+  },
+  "unit_conversions": {
+    "cubic_meters": {
+      "to_cubic_yards": 1.30795,
+      "to_cubic_feet": 35.3147,
+      "to_liters": 1000.0,
+      "to_gallons": 264.172
+    },
+    "cubic_yards": {
+      "to_cubic_meters": 0.764555,
+      "to_cubic_feet": 27.0,
+      "to_liters": 764.555,
+      "to_gallons": 201.974
+    },
+    "cubic_feet": {
+      "to_cubic_meters": 0.0283168,
+      "to_cubic_yards": 0.037037,
+      "to_liters": 28.3168,
+      "to_gallons": 7.48052
+    }
+  },
+  "material_densities": {
+    "gravel": {
+      "density_kg_per_m3": 1600.0,
+      "density_range_kg_per_m3": [1400.0, 1800.0],
+      "notes": "Typical gravel density, varies by stone type"
+    },
+    "mulch": {
+      "density_kg_per_m3": 300.0,
+      "density_range_kg_per_m3": [200.0, 450.0],
+      "notes": "Wood mulch density, varies by moisture content"
+    },
+    "sand": {
+      "density_kg_per_m3": 1600.0,
+      "density_range_kg_per_m3": [1400.0, 1750.0],
+      "notes": "Dry sand density, varies by moisture and compaction"
+    },
+    "topsoil": {
+      "density_kg_per_m3": 1200.0,
+      "density_range_kg_per_m3": [1000.0, 1400.0],
+      "notes": "Dry topsoil density"
+    },
+    "compost": {
+      "density_kg_per_m3": 500.0,
+      "density_range_kg_per_m3": [400.0, 700.0],
+      "notes": "Compost density, varies by composition and moisture"
+    }
+  }
+}

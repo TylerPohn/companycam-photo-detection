@@ -1,0 +1,44 @@
+{
+  "materials": [
+    {
+      "type": "shingles",
+      "unit": "bundles",
+      "description": "Roofing shingles",
+      "detection_class": "shingles",
+      "typical_brands": ["CertainTeed", "Owens Corning", "GAF", "Tamko", "Atlas"],
+      "weight_per_unit_lbs": 75
+    },
+    {
+      "type": "plywood",
+      "unit": "sheets",
+      "description": "Plywood sheets",
+      "detection_class": "plywood",
+      "typical_brands": ["Weyerhaeuser", "Georgia-Pacific", "Huber", "Roseburg", "LP"],
+      "weight_per_unit_lbs": 60
+    },
+    {
+      "type": "drywall",
+      "unit": "sheets",
+      "description": "Drywall/Gypsum board",
+      "detection_class": "drywall",
+      "typical_brands": ["USG", "National Gypsum", "CertainTeed", "American Gypsum"],
+      "weight_per_unit_lbs": 55
+    },
+    {
+      "type": "insulation",
+      "unit": "bags",
+      "description": "Insulation material",
+      "detection_class": "insulation",
+      "typical_brands": ["Owens Corning", "Johns Manville", "CertainTeed", "Knauf"],
+      "weight_per_unit_lbs": 20
+    },
+    {
+      "type": "other",
+      "unit": "units",
+      "description": "Other building materials",
+      "detection_class": "other_materials",
+      "typical_brands": [],
+      "weight_per_unit_lbs": 50
+    }
+  ]
+}

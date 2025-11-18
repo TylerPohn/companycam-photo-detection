@@ -1,0 +1,77 @@
+# Example Terraform Variables File
+# Copy this to terraform.tfvars or <environment>.tfvars and customize
+
+# ==============================================================================
+# Environment Configuration
+# ==============================================================================
+
+environment = "dev" # Options: dev, staging, prod
+aws_region  = "us-east-1"
+
+# ==============================================================================
+# VPC Configuration
+# ==============================================================================
+
+vpc_cidr             = "10.0.0.0/16"
+availability_zones   = ["us-east-1a", "us-east-1b"]
+public_subnet_cidrs  = ["10.0.1.0/24", "10.0.2.0/24"]
+private_subnet_cidrs = ["10.0.10.0/24", "10.0.11.0/24", "10.0.12.0/24", "10.0.13.0/24"]
+enable_nat_gateway   = true
+
+# ==============================================================================
+# S3 Configuration
+# ==============================================================================
+
+s3_bucket_prefix                 = "companycam-photos"
+s3_lifecycle_glacier_days        = 90
+s3_lifecycle_temp_expiration_days = 30
+s3_versioning_enabled            = true
+
+allowed_cors_origins = [
+  "https://app.companycam.com",
+  "https://mobile.companycam.com",
+  "http://localhost:3000"
+]
+
+# ==============================================================================
+# API Gateway Configuration
+# ==============================================================================
+
+api_gateway_name           = "companycam-api"
+api_gateway_stage_name     = "v1"
+api_rate_limit_general     = 100
+api_rate_limit_detection   = 10
+api_throttle_burst_limit   = 200
+api_throttle_rate_limit    = 100
+
+# ==============================================================================
+# Redis Configuration
+# ==============================================================================
+
+# Development settings
+redis_node_type        = "cache.t3.micro"
+redis_num_cache_nodes  = 1
+
+# Production settings (uncomment for prod)
+# redis_node_type        = "cache.r6g.xlarge"
+# redis_num_cache_nodes  = 3
+
+redis_engine_version   = "7.0"
+redis_parameter_family = "redis7"
+redis_port             = 6379
+
+# ==============================================================================
+# CloudWatch Configuration
+# ==============================================================================
+
+cloudwatch_retention_days   = 30  # Use 90 for production
+enable_detailed_monitoring  = true
+
+# ==============================================================================
+# Additional Tags
+# ==============================================================================
+
+additional_tags = {
+  CostCenter = "Engineering"
+  Owner      = "DevOps Team"
+}
