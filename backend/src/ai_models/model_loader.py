@@ -5,6 +5,7 @@ from typing import Optional, Dict, Any
 from enum import Enum
 
 from .damage_detection import DamageDetectionPipeline, DamageDetectionConfig
+from .volume_estimation import VolumeEstimationPipeline, VolumeEstimationConfig
 
 logger = logging.getLogger(__name__)
 
@@ -54,6 +55,29 @@ class ModelLoader:
             logger.debug("Using cached DamageDetectionPipeline instance")
 
         return self._models[ModelType.DAMAGE_DETECTION]
+
+    def get_volume_estimation_pipeline(
+        self, config: Optional[VolumeEstimationConfig] = None
+    ) -> VolumeEstimationPipeline:
+        """
+        Get or create volume estimation pipeline instance.
+
+        Args:
+            config: Optional configuration for pipeline
+
+        Returns:
+            VolumeEstimationPipeline instance
+        """
+        if ModelType.VOLUME_ESTIMATION not in self._models:
+            logger.info("Creating new VolumeEstimationPipeline instance")
+            pipeline = VolumeEstimationPipeline(config)
+            pipeline.load_models()
+            self._models[ModelType.VOLUME_ESTIMATION] = pipeline
+            logger.info("VolumeEstimationPipeline loaded and cached")
+        else:
+            logger.debug("Using cached VolumeEstimationPipeline instance")
+
+        return self._models[ModelType.VOLUME_ESTIMATION]
 
     def unload_model(self, model_type: ModelType):
         """

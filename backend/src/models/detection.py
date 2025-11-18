@@ -32,6 +32,12 @@ class Detection(BaseModel):
 
     # Relationships
     photo = relationship("Photo", back_populates="detections")
+    feedback = relationship(
+        "UserFeedback", back_populates="detection", cascade="all, delete-orphan"
+    )
+    history = relationship(
+        "DetectionHistory", back_populates="detection", cascade="all, delete-orphan"
+    )
 
     # Constraints
     __table_args__ = (

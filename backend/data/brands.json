@@ -1,0 +1,102 @@
+{
+  "brands": {
+    "shingles": [
+      {
+        "name": "CertainTeed",
+        "aliases": ["Certainteed", "CT", "Certain Teed"],
+        "logo_keywords": ["certainteed", "ct logo"]
+      },
+      {
+        "name": "Owens Corning",
+        "aliases": ["Owens", "OC", "Owens-Corning"],
+        "logo_keywords": ["owens", "corning", "oc"]
+      },
+      {
+        "name": "GAF",
+        "aliases": ["GAF Materials", "GAF Roofing"],
+        "logo_keywords": ["gaf"]
+      },
+      {
+        "name": "Tamko",
+        "aliases": ["TAMKO Building Products"],
+        "logo_keywords": ["tamko"]
+      },
+      {
+        "name": "Atlas",
+        "aliases": ["Atlas Roofing"],
+        "logo_keywords": ["atlas"]
+      }
+    ],
+    "plywood": [
+      {
+        "name": "Weyerhaeuser",
+        "aliases": ["Weyerhauser", "Weyerhaeuser Company"],
+        "logo_keywords": ["weyerhaeuser"]
+      },
+      {
+        "name": "Georgia-Pacific",
+        "aliases": ["GP", "Georgia Pacific"],
+        "logo_keywords": ["gp", "georgia pacific"]
+      },
+      {
+        "name": "Huber",
+        "aliases": ["Huber Engineered Woods"],
+        "logo_keywords": ["huber"]
+      },
+      {
+        "name": "Roseburg",
+        "aliases": ["Roseburg Forest Products"],
+        "logo_keywords": ["roseburg"]
+      },
+      {
+        "name": "LP",
+        "aliases": ["Louisiana-Pacific", "LP Building Products"],
+        "logo_keywords": ["lp", "louisiana pacific"]
+      }
+    ],
+    "drywall": [
+      {
+        "name": "USG",
+        "aliases": ["US Gypsum", "United States Gypsum"],
+        "logo_keywords": ["usg"]
+      },
+      {
+        "name": "National Gypsum",
+        "aliases": ["NG", "National Gypsum Company"],
+        "logo_keywords": ["national gypsum"]
+      },
+      {
+        "name": "CertainTeed",
+        "aliases": ["Certainteed"],
+        "logo_keywords": ["certainteed"]
+      },
+      {
+        "name": "American Gypsum",
+        "aliases": ["AG"],
+        "logo_keywords": ["american gypsum"]
+      }
+    ],
+    "insulation": [
+      {
+        "name": "Owens Corning",
+        "aliases": ["OC", "Owens-Corning"],
+        "logo_keywords": ["owens", "corning"]
+      },
+      {
+        "name": "Johns Manville",
+        "aliases": ["JM", "Johns-Manville"],
+        "logo_keywords": ["johns", "manville", "jm"]
+      },
+      {
+        "name": "CertainTeed",
+        "aliases": ["Certainteed"],
+        "logo_keywords": ["certainteed"]
+      },
+      {
+        "name": "Knauf",
+        "aliases": ["Knauf Insulation"],
+        "logo_keywords": ["knauf"]
+      }
+    ]
+  }
+}

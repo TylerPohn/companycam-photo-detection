@@ -9,6 +9,10 @@ from src.api.auth import router as auth_router
 from src.api.projects import router as projects_router
 from src.api.health import router as health_router
 from src.api.orchestrator import router as orchestrator_router
+from src.api.detection_routes import router as detection_router
+from src.api.feedback_routes import router as feedback_router
+from src.api.report_routes import router as report_router
+from src.api.websocket_routes import router as websocket_router
 from src.config import settings
 
 # Configure logging
@@ -39,6 +43,10 @@ app.include_router(auth_router)
 app.include_router(projects_router)
 app.include_router(photos_router)
 app.include_router(orchestrator_router)
+app.include_router(detection_router)
+app.include_router(feedback_router)
+app.include_router(report_router)
+app.include_router(websocket_router)
 
 
 @app.get("/")

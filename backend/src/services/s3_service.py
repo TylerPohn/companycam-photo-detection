@@ -1,8 +1,9 @@
 """S3 service for managing photo uploads and pre-signed URLs"""
 
 import logging
+import json
 from datetime import datetime
-from typing import Dict, Optional
+from typing import Dict, Optional, Any
 import boto3
 from botocore.exceptions import ClientError
 from botocore.config import Config
@@ -320,3 +321,98 @@ class S3Service:
         except Exception as e:
             logger.error(f"Unexpected error uploading bytes: {e}")
             raise S3ConnectionError(f"Failed to upload bytes: {str(e)}")
+
+    def upload_json(self, s3_key: str, data: Dict[str, Any]) -> str:
+        """
+        Upload JSON data to S3.
+
+        Args:
+            s3_key: S3 key for the object
+            data: Dictionary to serialize as JSON
+
+        Returns:
+            S3 URL of uploaded object
+
+        Raises:
+            S3ConnectionError: If upload fails
+        """
+        try:
+            json_bytes = json.dumps(data, default=str).encode("utf-8")
+            return self.upload_bytes(json_bytes, s3_key, content_type="application/json")
+        except Exception as e:
+            logger.error(f"Error uploading JSON: {e}")
+            raise S3ConnectionError(f"Failed to upload JSON: {str(e)}")
+
+    def download_json(self, s3_key: str) -> Dict[str, Any]:
+        """
+        Download and parse JSON from S3.
+
+        Args:
+            s3_key: S3 key of the JSON object
+
+        Returns:
+            Parsed JSON dictionary
+
+        Raises:
+            S3ConnectionError: If download or parsing fails
+        """
+        try:
+            response = self.s3_client.get_object(Bucket=settings.s3_bucket, Key=s3_key)
+            json_bytes = response["Body"].read()
+            data = json.loads(json_bytes.decode("utf-8"))
+            logger.debug(f"Downloaded JSON from {s3_key}")
+            return data
+        except ClientError as e:
+            error_code = e.response.get("Error", {}).get("Code", "Unknown")
+            logger.error(f"Error downloading JSON: {error_code} - {e}")
+            raise S3ConnectionError(f"Failed to download JSON: {error_code}")
+        except json.JSONDecodeError as e:
+            logger.error(f"Error parsing JSON: {e}")
+            raise S3ConnectionError(f"Failed to parse JSON: {str(e)}")
+        except Exception as e:
+            logger.error(f"Unexpected error downloading JSON: {e}")
+            raise S3ConnectionError(f"Failed to download JSON: {str(e)}")
+
+    def upload_file_obj(
+        self, file_obj: bytes, s3_key: str, content_type: str = "application/octet-stream"
+    ) -> str:
+        """
+        Upload file object (bytes) to S3.
+        Alias for upload_bytes for compatibility.
+
+        Args:
+            file_obj: Bytes to upload
+            s3_key: S3 key for the object
+            content_type: Content type of the file
+
+        Returns:
+            S3 URL of uploaded object
+        """
+        return self.upload_bytes(file_obj, s3_key, content_type)
+
+    def download_file(self, s3_key: str) -> bytes:
+        """
+        Download file bytes from S3.
+        Synchronous version of download_file_bytes.
+
+        Args:
+            s3_key: S3 key of the object
+
+        Returns:
+            File bytes
+
+        Raises:
+            S3ConnectionError: If download fails
+        """
+        try:
+            response = self.s3_client.get_object(Bucket=settings.s3_bucket, Key=s3_key)
+            file_bytes = response["Body"].read()
+            logger.debug(f"Downloaded {len(file_bytes)} bytes from {s3_key}")
+            return file_bytes
+        except ClientError as e:
+            error_code = e.response.get("Error", {}).get("Code", "Unknown")
+            logger.error(f"Error downloading file: {error_code} - {e}")
+            raise S3ConnectionError(f"Failed to download file: {error_code}")
+        except Exception as e:
+            logger.error(f"Unexpected error downloading file: {e}")
+            raise S3ConnectionError(f"Failed to download file: {str(e)}")
