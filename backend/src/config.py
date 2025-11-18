@@ -27,6 +27,16 @@ class Settings(BaseSettings):
     aws_endpoint_url: Optional[str] = None
     s3_bucket: str = "companycam-photos"
 
+    # AWS SQS
+    sqs_queue_url: Optional[str] = None
+    sqs_detection_queue_name: str = "photo-detection-queue"
+    sqs_high_priority_queue_name: str = "companycam-photos-high-priority-development"
+    sqs_normal_priority_queue_name: str = "companycam-photos-normal-priority-development"
+    sqs_low_priority_queue_name: str = "companycam-photos-low-priority-development"
+    sqs_high_priority_dlq_name: str = "companycam-photos-high-priority-dlq-development"
+    sqs_normal_priority_dlq_name: str = "companycam-photos-normal-priority-dlq-development"
+    sqs_low_priority_dlq_name: str = "companycam-photos-low-priority-dlq-development"
+
     # Security
     secret_key: str
     jwt_secret: Optional[str] = None

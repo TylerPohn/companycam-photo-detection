@@ -1,9 +1,19 @@
 """Photo model"""
 
-from sqlalchemy import Column, String, Integer, Text, ForeignKey, DateTime
+from sqlalchemy import Column, String, Integer, Text, ForeignKey, DateTime, Enum
 from sqlalchemy.dialects.postgresql import UUID, JSONB
 from sqlalchemy.orm import relationship
 from src.models.base import BaseModel
+import enum
+
+
+class PhotoStatus(str, enum.Enum):
+    """Photo upload and processing status"""
+    PENDING_UPLOAD = "pending_upload"
+    UPLOADED = "uploaded"
+    PROCESSING = "processing"
+    COMPLETED = "completed"
+    FAILED = "failed"
 
 
 class Photo(BaseModel):
@@ -28,6 +38,13 @@ class Photo(BaseModel):
     height = Column(Integer, nullable=True)
     exif_data = Column(JSONB, nullable=True)  # Camera metadata, GPS, timestamp
     uploaded_at = Column(DateTime, nullable=True)
+    status = Column(
+        Enum(PhotoStatus),
+        nullable=False,
+        default=PhotoStatus.PENDING_UPLOAD,
+        server_default=PhotoStatus.PENDING_UPLOAD.value,
+        index=True
+    )
 
     # Relationships
     user = relationship("User", back_populates="photos")
@@ -36,6 +53,9 @@ class Photo(BaseModel):
         "Detection", back_populates="photo", cascade="all, delete-orphan"
     )
     tags = relationship("Tag", back_populates="photo", cascade="all, delete-orphan")
+    processing_jobs = relationship(
+        "ProcessingJob", back_populates="photo", cascade="all, delete-orphan"
+    )
 
     def __repr__(self):
         return f"<Photo(id={self.id}, s3_key={self.s3_key})>"

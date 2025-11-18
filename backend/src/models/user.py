@@ -15,11 +15,12 @@ class User(BaseModel):
     __tablename__ = "users"
 
     email = Column(String(255), unique=True, nullable=False, index=True)
+    password_hash = Column(String(255), nullable=False)
     first_name = Column(String(100), nullable=True)
     last_name = Column(String(100), nullable=True)
     role = Column(
         String(50), default="contractor", nullable=False
-    )  # contractor, insurance_adjuster, project_manager
+    )  # contractor, insurance_adjuster, project_manager, admin
     organization_id = Column(
         UUID(as_uuid=True), ForeignKey("organizations.id"), nullable=False, index=True
     )

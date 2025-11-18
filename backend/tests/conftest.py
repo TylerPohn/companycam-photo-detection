@@ -7,6 +7,7 @@ from typing import AsyncGenerator
 from fastapi.testclient import TestClient
 from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine, async_sessionmaker
 from sqlalchemy.pool import NullPool
+from sqlalchemy import text
 
 from src.main import app
 from src.database import Base
@@ -50,12 +51,24 @@ async def test_engine():
     )
 
     async with engine.begin() as conn:
+        # Create enum types first (using DO block to check existence)
+        await conn.execute(
+            text("""
+                DO $$ BEGIN
+                    CREATE TYPE photostatus AS ENUM ('pending_upload', 'uploaded', 'processing', 'completed', 'failed');
+                EXCEPTION
+                    WHEN duplicate_object THEN null;
+                END $$;
+            """)
+        )
         await conn.run_sync(Base.metadata.create_all)
 
     yield engine
 
     async with engine.begin() as conn:
         await conn.run_sync(Base.metadata.drop_all)
+        # Drop enum types
+        await conn.execute(text("DROP TYPE IF EXISTS photostatus CASCADE"))
 
     await engine.dispose()
 
@@ -87,8 +100,11 @@ async def sample_organization(db_session: AsyncSession) -> Organization:
 @pytest_asyncio.fixture
 async def sample_user(db_session: AsyncSession, sample_organization: Organization) -> User:
     """Create a sample user for testing"""
+    from src.services.auth_service import AuthService
+
     user = User(
         email="test@example.com",
+        password_hash=AuthService.hash_password("TestPassword123!"),
         first_name="Test",
         last_name="User",
         role="contractor",
